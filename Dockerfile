@@ -5,8 +5,15 @@ FROM node:lts-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 ENV GIT_TERMINAL_PROMPT=0
-RUN apk update && apk add --no-cache git openssh && npm install shelljs
-COPY gitstalker.js .
-COPY gitstalker-cron /etc/periodic/15min/
 
-CMD node gitstalker.js && crond -f
+COPY gitstalker-repos.js .
+COPY gitstalker-backup.js .
+COPY cron-repos /etc/periodic/15min/
+COPY cron-backup /etc/periodic/15min/
+
+RUN apk update && apk add --no-cache git openssh && \
+    chmod +x /etc/periodic/15min/cron-repos && \
+    chmod +x /etc/periodic/15min/cron-backup && \
+    npm install bent shelljs --production --no-save --loglevel=error
+
+CMD crond -f
