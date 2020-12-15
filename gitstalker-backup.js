@@ -15,9 +15,10 @@ async function run() {
         if (username && !token) return console.warn("GitHub username is set, but GITHUB_TOKEN is missing")
         if (!username && token) return console.warn("GitHub token is set, but GITHUB_USERNAME is missing")
 
-        // Backup days options.
+        // Extra backup options.
         const days = parseInt(process.env.BACKUP_DAYS) || 7
         const daysMs = days * 86400 * 1000
+        const includeArchived = process.env.INCLUDE_ARCHIVED || false
 
         // Get days and timestamp YYYY-MM-DD.
         const now = new Date()
@@ -39,12 +40,21 @@ async function run() {
         // Iterate user repos and try download each one of them.
         for (let repo of repos) {
             try {
-                if (!repo.archive_url) {
-                    console.log(`Repo ${repo.full_name} has no archive URL`)
+                let data = null
+
+                // Do not download disabled, empty or archived repos (depending on passed options).
+                if (repo.disabled) {
+                    console.log(`Repo ${repo.full_name} is disabled, will not download`)
                     continue
                 }
-
-                let data = null
+                if (!repo.archive_url) {
+                    console.log(`Repo ${repo.full_name} has no download URL`)
+                    continue
+                }
+                if (!includeArchived && repo.archived) {
+                    console.log(`Repo ${repo.full_name} is archived, will not download`)
+                    continue
+                }
 
                 // Redirection count and default download URL.
                 let count = 0

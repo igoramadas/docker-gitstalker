@@ -34,6 +34,10 @@ Your personal GitHub access token. To get one, follow [these instructions](https
 
 For how many days should backups be kept? Default value is **7**.
 
+#### INCLUDE_ARCHIVED
+
+If 1 or true, archived repos will also be backed up. Default is **false**.
+
 #### USER_AGENT
 
 Allows you to change the User-Agent header connecting to GitHub. Default is **GitStalker**.
