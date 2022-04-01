@@ -1,7 +1,7 @@
 # HELPER COMMANDS
 
 build:
-	docker build -t igoramadas/gitstalker .
+	docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t igoramadas/gitstalker .
 
 publish:
-	docker push igoramadas/gitstalker
+	docker buildx build --push --platform linux/amd64,linux/arm64,linux/arm/v7 -t igoramadas/gitstalker .
