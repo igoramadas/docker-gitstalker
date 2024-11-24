@@ -1,5 +1,7 @@
 # GitStalker
 
+## THIS PROJECT IS NOT MAINTAINED ANY LONGER! If you still want to backup your GIT repos, I recommend Gickup: https://github.com/cooperspencer/gickup
+
 This is a small Docker image to automatically clone / pull GIT and backup GitHub repos.
 
 - Clone and pull specific GIT repositories every 15 minutes
